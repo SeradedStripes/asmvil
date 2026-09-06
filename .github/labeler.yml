@@ -1,0 +1,6 @@
+actions:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .github/workflows/*
+          - .github/labeler.yml
+          - .github/actions/*
