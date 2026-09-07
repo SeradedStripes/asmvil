@@ -36,8 +36,8 @@ build-x86_64:
     out="{{build_dir}}/{{name}}_x86_64"
     mkdir -p "$out"
     as --64 -I include/x86_64 -o "$out/{{name}}.o" {{src_dir}}/main.asm
-    as --64 -I include/x86_64 -o "$out/syscall.o" {{src_dir}}/x86_64/syscall.asm
-    ld -m elf_x86_64 -o "$out/{{name}}" "$out/{{name}}.o" "$out/syscall.o"
+    as --64 -I include/x86_64 -o "$out/start.o" {{src_dir}}/x86_64/start.asm
+    ld -m elf_x86_64 -o "$out/{{name}}" "$out/{{name}}.o" "$out/start.o"
     echo "Built: $out/{{name}}"
 
 build-aarch64:
@@ -46,8 +46,8 @@ build-aarch64:
     out="{{build_dir}}/{{name}}_aarch64"
     mkdir -p "$out"
     as -march=armv8-a -I include/aarch64 -o "$out/{{name}}.o" {{src_dir}}/main.asm
-    as -march=armv8-a -I include/aarch64 -o "$out/syscall.o" {{src_dir}}/aarch64/syscall.asm
-    ld -m aarch64linux -o "$out/{{name}}" "$out/{{name}}.o" "$out/syscall.o"
+    as -march=armv8-a -I include/aarch64 -o "$out/start.o" {{src_dir}}/aarch64/start.asm
+    ld -m aarch64linux -o "$out/{{name}}" "$out/{{name}}.o" "$out/start.o"
     echo "Built: $out/{{name}}"
 
 run: build

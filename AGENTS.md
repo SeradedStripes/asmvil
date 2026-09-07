@@ -31,10 +31,14 @@ share one conceptual source, and arch-specific pieces are selected by the build
 via `-I include/<arch>` / `src/<arch>/`. Avoid duplicating logic per arch; call
 into arch-specific helpers only where the ABI or syscalls genuinely differ.
 
-There is a **single shared `src/main.asm`** that calls arch-specific helpers.
-Cross-platform logic (entry point, application flow) lives in `src/main.asm`,
-and arch-specific pieces (syscall wrappers like `sys_exit`) live under
-`src/<arch>/` and are called into from the shared code.
+There is a **single shared `src/main.asm`** that is called by arch-specific code.
+Cross-platform logic (the `main` application flow) lives in `src/main.asm`, and
+arch-specific pieces (the `_start` entry point and syscall wrappers like
+`sys_exit`) live under `src/<arch>/` and call into the shared code.
+
+Note: the true program entry point (`_start`) is arch-specific because it uses
+`call`/`bl` to invoke `main`, and syscall traps differ (`syscall` vs `svc`). Only
+`src/main.asm` (which contains `main` with register-agnostic logic) is shared.
 
 ## Directory layout
 
@@ -44,9 +48,9 @@ Includes and tests are arch-specific and mirrored, never assume the same
 file assembles for both architectures.
 
 ```
-src/main.asm          # shared entry point / cross-platform logic (calls arch code)
-src/x86_64/*.asm      # x86-64 helpers (syscall.asm: sys_exit, Intel syntax)
-src/aarch64/*.asm     # aarch64 helpers (syscall.asm: sys_exit, ARM syntax)
+src/main.asm          # shared cross-platform logic (main), register-agnostic
+src/x86_64/*.asm      # x86-64 start.asm: _start + sys_exit (Intel, syscall)
+src/aarch64/*.asm     # aarch64 start.asm: _start + sys_exit (ARM, svc)
 include/x86_64/*.inc  # x86-64 includes (common.inc: syscall constants)
 include/aarch64/*.inc # aarch64 includes (common.inc: syscall constants)
 tests/x86_64/*.asm    # x86-64 tests
@@ -57,7 +61,7 @@ build/                # generated, gitignored
 The `justfile` passes the matching include dir via `as -I include/<arch>` so
 `.include "common.inc"` resolves to the correct arch in both `src/` and
 `tests/` files. Each build assembles the shared `src/main.asm` together with
-the matching `src/<arch>/syscall.asm` and links both objects.
+the matching `src/<arch>/start.asm` and links both objects.
 
 ## Architecture notes
 
