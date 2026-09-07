@@ -1,5 +1,4 @@
 name := "asmvil"
-main_src := "main"
 build_dir := "build"
 src_dir := "src"
 
@@ -34,18 +33,22 @@ build-all: build-x86_64 build-aarch64
 build-x86_64:
     #!/usr/bin/env bash
     set -euo pipefail
-    mkdir -p {{build_dir}}/{{name}}_x86_64
-    as --64 -I include/x86_64 -o {{build_dir}}/{{name}}_x86_64/{{name}}.o {{src_dir}}/x86_64/{{main_src}}.asm
-    ld -m elf_x86_64 -o {{build_dir}}/{{name}}_x86_64/{{name}} {{build_dir}}/{{name}}_x86_64/{{name}}.o
-    echo "Built: {{build_dir}}/{{name}}_x86_64/{{name}}"
+    out="{{build_dir}}/{{name}}_x86_64"
+    mkdir -p "$out"
+    as --64 -I include/x86_64 -o "$out/{{name}}.o" {{src_dir}}/main.asm
+    as --64 -I include/x86_64 -o "$out/syscall.o" {{src_dir}}/x86_64/syscall.asm
+    ld -m elf_x86_64 -o "$out/{{name}}" "$out/{{name}}.o" "$out/syscall.o"
+    echo "Built: $out/{{name}}"
 
 build-aarch64:
     #!/usr/bin/env bash
     set -euo pipefail
-    mkdir -p {{build_dir}}/{{name}}_aarch64
-    as -march=armv8-a -I include/aarch64 -o {{build_dir}}/{{name}}_aarch64/{{name}}.o {{src_dir}}/aarch64/{{main_src}}.asm
-    ld -m aarch64linux -o {{build_dir}}/{{name}}_aarch64/{{name}} {{build_dir}}/{{name}}_aarch64/{{name}}.o
-    echo "Built: {{build_dir}}/{{name}}_aarch64/{{name}}"
+    out="{{build_dir}}/{{name}}_aarch64"
+    mkdir -p "$out"
+    as -march=armv8-a -I include/aarch64 -o "$out/{{name}}.o" {{src_dir}}/main.asm
+    as -march=armv8-a -I include/aarch64 -o "$out/syscall.o" {{src_dir}}/aarch64/syscall.asm
+    ld -m aarch64linux -o "$out/{{name}}" "$out/{{name}}.o" "$out/syscall.o"
+    echo "Built: $out/{{name}}"
 
 run: build
     ./{{build_dir}}/{{name}}_$(uname -m)/{{name}}

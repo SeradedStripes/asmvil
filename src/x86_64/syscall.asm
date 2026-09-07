@@ -1,9 +1,9 @@
 .include "common.inc"
 
-.global _start
+.global sys_exit
 
 .section .text
-_start:
+sys_exit:
     mov rax, SYS_EXIT
     mov rdi, 0
     syscall
