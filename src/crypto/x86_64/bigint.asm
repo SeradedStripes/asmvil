@@ -1,6 +1,6 @@
 .intel_syntax noprefix
 
-# Big-integer arithmetic for x86-64 (GAS Intel / SysV calling convention).
+# Big-integer arithmetic for x86-64
 # See ../bigint.inc for the shared API and semantics.
 
 # SysV args: arg1=rdi, arg2=rsi, arg3=rdx, arg4=rcx.
