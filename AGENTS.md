@@ -75,6 +75,8 @@ GAS quirks when writing x86-64 Intel-syntax code:
 - Use `mov rdx, offset symbol` (not `mov rdx, symbol`) to load an immediate
   address; bare `symbol` is treated as a memory reference.
 - Use `lea rsi, [rip + symbol]` for RIP-relative addressing across text/data.
+- Use `#` for comments, not `;`. In GAS, `;` is a statement separator (multiple
+  statements per line), not a comment character. This differs from NASM/MASM.
 
 ## Code style
 
