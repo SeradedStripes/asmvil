@@ -17,10 +17,10 @@ jobs:
           - runner: ubuntu-24.04-arm
             arch: aarch64
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install just
-        uses: extractions/setup-just@v2
+        uses: extractions/setup-just@v4
 
       - name: Build
         run: just build
