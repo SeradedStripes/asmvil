@@ -81,14 +81,26 @@ test:
         echo "No tests found in $testdir/"
         exit 0
     fi
-    for test in "$testdir"/*.asm; do
+
+    # Build the crypto library for the native arch.
+    mkdir -p /tmp/asmvil_crypto
+    extra_objs=""
+    for src in {{src_dir}}/crypto/$arch/*.asm; do
+        [ -e "$src" ] || continue
+        obj="/tmp/asmvil_crypto/$(basename "$src" .asm).o"
+        as $asflags -o "$obj" "$src" || exit 1
+        extra_objs="$extra_objs $obj"
+    done
+
+    for test in $(find "$testdir" -name '*.asm' | sort); do
         echo "Testing: $test"
-        as $asflags -I "include/$arch" -o /tmp/test.o "$test"
-        ld $ldflags -o /tmp/test /tmp/test.o
+        as $asflags -I "include/$arch" -o /tmp/test.o "$test" || exit 1
+        ld $ldflags -o /tmp/test /tmp/test.o $extra_objs || exit 1
         /tmp/test
         echo "PASS: $test"
         rm -f /tmp/test /tmp/test.o
     done
+    rm -rf /tmp/asmvil_crypto
     echo "All tests passed"
 
 fmt:
