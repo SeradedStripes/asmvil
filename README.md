@@ -8,6 +8,8 @@ Essentially cloud hosting but on your own hardware.
 
 Oh and of course, free, opensource, and fully written in assembly.
 
+x86_64 is primary goal current, with aarch64 being a side goal.
+
 > [!IMPORTANT]
 > Asmvil is in very early development, and in no way runnable or usable.  
 > (With Saying that, I would also appreciate any feedback or contributions.)
