@@ -1,9 +1,8 @@
 .intel_syntax noprefix
 .include "common.inc"
 
-# HMAC-SHA256/SHA384/SHA512 tests: RFC 4231-style vectors for the RNG library, one-shot API. Exit 0 on success, 1 on failure.
-#
-# The expected digests were produced with Python's hmac and cross-checked using `openssl mac ... HMAC` for all six cases and three algorithms.
+# HMAC-SHA256/SHA384/SHA512 one-shot tests using RFC-style vectors.
+# Expected digests were cross-checked with Python and OpenSSL.
 
 .global _start
 
