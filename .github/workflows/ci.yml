@@ -2,7 +2,19 @@ name: CI
 
 on:
   push:
+    branches: [ main ]
+    paths:
+      - 'src/**'
+      - 'include/**'
+      - 'tests/**'
+      - '.github/workflows/**'
   pull_request:
+    branches: [ main ]
+    paths:
+      - 'src/**'
+      - 'include/**'
+      - 'tests/**'
+      - '.github/workflows/**'
 
 jobs:
   build-and-test:
