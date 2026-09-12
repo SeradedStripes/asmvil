@@ -6,7 +6,8 @@ It Helps you manage your servers, applications, and databases, all on your own h
 
 Essentially cloud hosting but on your own hardware.
 
-Oh and of course, free, opensource, and fully written in assembly.
+Oh and of course, free, opensource, and fully written in assembly.  
+**The tests are written in rust, everything else is assembly.**
 
 x86_64 is primary goal current, with aarch64 being a side goal.
 
