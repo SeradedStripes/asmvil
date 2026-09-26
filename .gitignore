@@ -3,6 +3,11 @@ build/
 target/
 artifacts/
 corpus/
+!/fuzz/corpus/
+/fuzz/corpus/*
+!/fuzz/corpus/bcrypt-parser/
+/fuzz/corpus/bcrypt-parser/*
+!/fuzz/corpus/bcrypt-parser/seed
 
 # temporarily uncommitted files
 docs/
